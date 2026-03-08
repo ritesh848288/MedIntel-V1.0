@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}MedIntel - About{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>About MedIntel</h1>
+    <p>Empowering healthcare professionals with AI-assisted medical guidance</p>
+</div>
+
+<div class="content-section">
+    <div class="about-grid">
+        <div class="about-card">
+            <i class="fas fa-brain"></i>
+            <h3>Powered by Mistral 7B</h3>
+            <p>Our system uses the Mistral 7B Instruct model running locally via llama.cpp for fast, private inference on medical literature.</p>
+        </div>
+        <div class="about-card">
+            <i class="fas fa-database"></i>
+            <h3>Medical Knowledge Base</h3>
+            <p>Built from curated medical textbooks and reference materials, indexed using FAISS vector search for accurate retrieval.</p>
+        </div>
+        <div class="about-card">
+            <i class="fas fa-lock"></i>
+            <h3>Privacy First</h3>
+            <p>Everything runs offline — no cloud APIs, no data sharing. Your consultations stay on your machine.</p>
+        </div>
+        <div class="about-card">
+            <i class="fas fa-code"></i>
+            <h3>Open Architecture</h3>
+            <p>Built with Flask, LangChain, and FAISS. Modular design allows easy extension and customization.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

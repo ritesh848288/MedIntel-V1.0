@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}MedIntel - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="page-header">
+        <h1><i class="fas fa-shield-alt"></i> Admin Dashboard</h1>
+        <p>System overview and management</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+            <div class="stat-info">
+                <h3>{{ total_users }}</h3>
+                <p>Total Users</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green"><i class="fas fa-user-md"></i></div>
+            <div class="stat-info">
+                <h3>{{ total_doctors }}</h3>
+                <p>Doctors</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon purple"><i class="fas fa-comment-medical"></i></div>
+            <div class="stat-info">
+                <h3>{{ total_chats }}</h3>
+                <p>Total Chats</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <a href="{{ url_for('admin_users') }}" class="action-card">
+            <i class="fas fa-users-cog"></i>
+            <h3>Manage Users</h3>
+            <p>View and manage all users</p>
+        </a>
+        <a href="{{ url_for('admin_chats') }}" class="action-card">
+            <i class="fas fa-comments"></i>
+            <h3>All Chats</h3>
+            <p>View all consultation logs</p>
+        </a>
+        <a href="{{ url_for('print_history') }}" class="action-card" target="_blank">
+            <i class="fas fa-print"></i>
+            <h3>Print All Chats</h3>
+            <p>Print complete chat history</p>
+        </a>
+    </div>
+
+    <!-- Recent Users -->
+    {% if recent_users %}
+    <div class="section-card">
+        <div class="section-header">
+            <h2><i class="fas fa-user-plus"></i> Recent Users</h2>
+            <a href="{{ url_for('admin_users') }}" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in recent_users %}
+                    <tr>
+                        <td>{{ user.full_name }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td><span class="role-badge {{ user.role }}">{{ user.role }}</span></td>
+                        <td>{{ user.created_at.strftime('%b %d, %Y') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recent Chats -->
+    {% if recent_chats %}
+    <div class="section-card">
+        <div class="section-header">
+            <h2><i class="fas fa-clock"></i> Recent Chats</h2>
+            <a href="{{ url_for('admin_chats') }}" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Question</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for chat in recent_chats %}
+                    <tr>
+                        <td>{{ chat.user.full_name }}</td>
+                        <td class="text-truncate">
+{{ chat.question[:80] }}
+{% if chat.question|length > 80 %}...{% endif %}
+</td>
+                        <td>{{ chat.created_at.strftime('%b %d, %Y %I:%M %p') }}</td>
+                        <td>
+                            <a href="{{ url_for('print_single_chat', chat_id=chat.id) }}" class="btn btn-xs btn-outline" target="_blank">
+                                <i class="fas fa-print"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

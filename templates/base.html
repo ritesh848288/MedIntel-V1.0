@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MedIntel - Medical Assistant{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar no-print">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>MedIntel</span>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('about') }}" class="nav-link">About</a></li>
+                    <li><a href="{{ url_for('contact') }}" class="nav-link">Contact</a></li>
+
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.role == 'doctor' %}
+                            <li><a href="{{ url_for('doctor_dashboard') }}" class="nav-link">Dashboard</a></li>
+                            <li><a href="{{ url_for('chat_page') }}" class="nav-link">Chat</a></li>
+                            <li><a href="{{ url_for('doctor_history') }}" class="nav-link">History</a></li>
+                        {% elif current_user.role == 'admin' %}
+                            <li><a href="{{ url_for('admin_dashboard') }}" class="nav-link">Dashboard</a></li>
+                            <li><a href="{{ url_for('admin_users') }}" class="nav-link">Users</a></li>
+                            <li><a href="{{ url_for('admin_chats') }}" class="nav-link">Chats</a></li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+
+                <div class="nav-auth">
+                    {% if current_user.is_authenticated %}
+                        <div class="user-info">
+                            <span class="user-badge {{ current_user.role }}">
+                                <i class="fas fa-{% if current_user.role == 'admin' %}shield-alt{% else %}user-md{% endif %}"></i>
+                                {{ current_user.full_name }}
+                            </span>
+                            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline" title="Logout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-sm btn-outline">Login</a>
+                        <a href="{{ url_for('register') }}" class="btn btn-sm btn-primary">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container no-print">
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">
+                        <span>{{ message }}</span>
+                        <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer no-print">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3><i class="fas fa-heartbeat"></i> MedIntel</h3>
+                <p>AI-powered medical assistant for preliminary health guidance. Running 100% offline with Mistral 7B.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Emergency</h4>
+                <ul>
+                    <li><i class="fas fa-phone"></i> Call 911</li>
+                    <li><i class="fas fa-envelope"></i> riteshshinde369@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 MedIntel. Not a substitute for professional medical advice.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

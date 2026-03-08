@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}MedIntel - All Chats{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="page-header">
+        <h1><i class="fas fa-comments"></i> All Chat Logs</h1>
+        <p>{{ chats|length }} total consultations</p>
+    </div>
+
+    <div class="section-actions">
+        {% if chats %}
+        <a href="{{ url_for('print_history') }}" class="btn btn-outline" target="_blank">
+            <i class="fas fa-print"></i> Print All
+        </a>
+        {% endif %}
+    </div>
+
+    {% if chats %}
+    <div class="history-list">
+        {% for chat in chats %}
+        <div class="history-card">
+            <div class="history-meta">
+                <div class="history-meta-left">
+                    <span class="history-user">
+                        <i class="fas fa-user-md"></i>
+                        {{ chat.user.full_name }} ({{ chat.user.username }})
+                    </span>
+                    <span class="history-date">
+                        <i class="fas fa-calendar"></i>
+                        {{ chat.created_at.strftime('%b %d, %Y at %I:%M %p') }}
+                    </span>
+                </div>
+                <a href="{{ url_for('print_single_chat', chat_id=chat.id) }}" class="btn btn-xs btn-outline" target="_blank">
+                    <i class="fas fa-print"></i> Print
+                </a>
+            </div>
+            <div class="history-content">
+                <div class="history-question">
+                    <strong><i class="fas fa-question-circle"></i> Question:</strong>
+                    <p>{{ chat.question }}</p>
+                </div>
+                <div class="history-answer">
+                    <strong><i class="fas fa-robot"></i> AI Response:</strong>
+                    <p>{{ chat.response }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-comments"></i>
+        <h3>No chats yet</h3>
+        <p>Chat logs will appear here once doctors start consultations.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+ctransformers==0.2.5
+sentence-transformers==2.2.2
+faiss-cpu
+langchain==0.0.225
+flask
+flask-sqlalchemy
+flask-login
+PyPDF2
+python-dotenv
+transformers
+huggingface-hub
+llama-cpp-python

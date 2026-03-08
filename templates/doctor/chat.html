@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}DoctorAI - Chat Consultation{% endblock %}
+
+{% block content %}
+<div class="chat-page">
+    <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="chat-title">
+                <i class="fas fa-comment-medical"></i>
+                <div>
+                    <h2>AI Consultation</h2>
+                    <span class="model-tag"><i class="fas fa-microchip"></i> Mistral 7B (Offline)</span>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="btn btn-sm btn-outline" id="clearChat" title="Clear chat">
+                    <i class="fas fa-eraser"></i>
+                </button>
+                <a href="{{ url_for('doctor_history') }}" class="btn btn-sm btn-outline" title="History">
+                    <i class="fas fa-history"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div class="messages-area" id="messagesArea">
+            <div class="welcome-msg">
+                <div class="welcome-icon"><i class="fas fa-user-md"></i></div>
+                <h3>Welcome, Dr. {{ current_user.full_name }}</h3>
+                <p>Describe symptoms or ask any medical question. Responses are based on indexed medical literature.</p>
+                <p class="small-text"><i class="fas fa-info-circle"></i> This is an AI assistant — not a replacement for clinical judgment.</p>
+
+                <div class="topic-suggestions">
+                    <h4>Quick Questions:</h4>
+                    <div class="topic-btns">
+                        <button class="topic-btn" data-msg="What are the symptoms of diabetes mellitus?">Diabetes symptoms</button>
+                        <button class="topic-btn" data-msg="What is the treatment for malaria?">Malaria treatment</button>
+                        <button class="topic-btn" data-msg="What are the causes of meningitis?">Meningitis causes</button>
+                        <button class="topic-btn" data-msg="What is osteomyelitis?">Osteomyelitis</button>
+                        <button class="topic-btn" data-msg="What are the symptoms of leprosy?">Leprosy symptoms</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span><span></span><span></span>
+            <span class="typing-text">DoctorAI is thinking...</span>
+        </div>
+
+        <!-- Input Area -->
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <textarea id="messageInput" placeholder="Type your medical question..." rows="1"></textarea>
+                <button class="send-btn" id="sendBtn" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <p class="input-disclaimer">
+                <i class="fas fa-exclamation-circle"></i>
+                In emergencies, call emergency services immediately.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

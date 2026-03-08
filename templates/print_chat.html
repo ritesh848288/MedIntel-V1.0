@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - MedIntel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Times New Roman', serif; color: #333; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .print-header { text-align: center; border-bottom: 2px solid #0066cc; padding-bottom: 15px; margin-bottom: 25px; }
+        .print-header h1 { font-size: 24px; color: #0066cc; margin-bottom: 5px; }
+        .print-header p { font-size: 12px; color: #666; }
+        .print-actions { text-align: center; margin-bottom: 20px; }
+        .print-actions button { padding: 10px 25px; background: #0066cc; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; margin: 0 5px; }
+        .print-actions button.secondary { background: #666; }
+        .chat-entry { border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin-bottom: 15px; page-break-inside: avoid; }
+        .chat-entry .meta { font-size: 11px; color: #888; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .chat-entry .question { margin-bottom: 10px; }
+        .chat-entry .question strong { color: #0066cc; }
+        .chat-entry .answer strong { color: #28a745; }
+        .chat-entry p { margin-top: 5px; line-height: 1.6; font-size: 13px; white-space: pre-wrap; }
+        .print-footer { margin-top: 30px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #ddd; padding-top: 10px; }
+
+        @media print {
+            .print-actions { display: none; }
+            body { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="print-header">
+        <h1>MedIntel - {{ title }}</h1>
+        <p>Generated on {{ now().strftime('%B %d, %Y at %I:%M %p') if now is defined else '' }}</p>
+        <p>Medical AI Consultation Report</p>
+    </div>
+
+    <div class="print-actions">
+        <button onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+        <button class="secondary" onclick="window.close()">Close</button>
+    </div>
+
+    {% for chat in chats %}
+    <div class="chat-entry">
+        <div class="meta">
+            {% if chat.user %}
+            <strong>Doctor:</strong> {{ chat.user.full_name }} |
+            {% endif %}
+            <strong>Date:</strong> {{ chat.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+        </div>
+        <div class="question">
+            <strong>Patient Question:</strong>
+            <p>{{ chat.query }}</p>
+        </div>
+        <div class="answer">
+            <strong>AI Medical Response:</strong>
+            <p>{{ chat.response }}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="print-footer">
+        <p><strong>Disclaimer:</strong> This is an AI-generated report for informational purposes only. Not a substitute for professional medical advice.</p>
+        <p>&copy; 2026 MedIntel Medical Assistant</p>
+    </div>
+</body>
+</html>
